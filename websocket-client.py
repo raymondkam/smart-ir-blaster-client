@@ -4,7 +4,7 @@ import time
 import json
 import ssl
 
-with open('websocket.json') as json_data:
+with open('./config/websocket.json') as json_data:
     token = json.load(json_data)["token"]
 
 def on_message(ws, message):
