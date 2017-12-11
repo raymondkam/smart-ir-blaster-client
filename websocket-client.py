@@ -19,7 +19,7 @@ def ir_send(remote_name, ir_id, delay, num_times):
     print("\nIR: Sending IR command {} on {}").format(ir_id, remote_name)
     if num_times < 1:
         num_times = 1
-    error = subprocess.call(["irsend", "-#", num_times, "SEND_ONCE", remote_name, ir_id])
+    error = subprocess.call(["irsend", "-#", str(num_times), "SEND_ONCE", remote_name, ir_id])
     if error:
         print("IR: sending IR command {} {} times on {} failed").format(ir_id, num_times, remote_name)
     else:
@@ -70,6 +70,7 @@ def on_open(ws):
     ws.send(json.dumps({"token": token, "type": "auth"}))
 
 if __name__ == "__main__":
+    websocket.enableTrace(True)
     ws = websocket.WebSocketApp("wss://" + server_address,
                               on_message = on_message,
                               on_error = on_error,
