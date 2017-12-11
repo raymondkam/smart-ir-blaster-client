@@ -1,3 +1,4 @@
 {
-    "token": "Put Express WebSocket Auth Token Here"
+    "token": "Put Express WebSocket auth token here",
+    "server_address": "Put WebSocket server address here"
 }
