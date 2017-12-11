@@ -10,7 +10,7 @@ with open('./config/websocket.json') as json_data:
     token = websocketJSON["token"]
     server_address = websocketJSON["server_address"]
 
-pingInterval = 15
+pingInterval = 30
 samsung_remote_ir_ids = ["KEY_MUTE", "KEY_VOLUMEUP", "KEY_VOLUMEDOWN"]
 samsung_discrete_ir_ids = ["POWER_ON", "POWER_OFF", "SOURCE_TV"," SOURCE_HDMI1", "SOURCE_HDMI2"]
 
@@ -70,7 +70,7 @@ def on_open(ws):
     ws.send(json.dumps({"token": token, "type": "auth"}))
 
 if __name__ == "__main__":
-    ws = websocket.WebSocketApp("ws://" + server_address,
+    ws = websocket.WebSocketApp("wss://" + server_address,
                               on_message = on_message,
                               on_error = on_error,
                               on_close = on_close)
