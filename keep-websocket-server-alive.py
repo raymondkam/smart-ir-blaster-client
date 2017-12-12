@@ -9,9 +9,12 @@ with open('./config/websocket.json') as json_data:
 
 health_check_interval = 60
 
+def formatted_time():
+    return time.strftime('%l:%M%p %Z on %b %d, %Y')
+
 def keep_websocket_server_alive():
     while True:
-        print("\n### Checking websocket server health ###")
+        print("\n{} ### Checking websocket server health ###").format(formatted_time())
         subprocess.call(["curl", "-X", "GET", health_check_server_address])
         time.sleep(health_check_interval)
 

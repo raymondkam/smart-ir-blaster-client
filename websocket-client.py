@@ -15,29 +15,32 @@ reconnect_interval = 10
 samsung_remote_ir_ids = ["KEY_MUTE", "KEY_VOLUMEUP", "KEY_VOLUMEDOWN"]
 samsung_discrete_ir_ids = ["POWER_ON", "POWER_OFF", "SOURCE_TV", "SOURCE_HDMI1","SOURCE_HDMI2"]
 
+def formatted_time():
+    return time.strftime('%l:%M%p %Z on %b %d, %Y')
+
 def ir_send(remote_name, ir_id, delay, num_times):
     time.sleep(delay)
-    print("\nIR: Sending IR command {} on {}").format(ir_id, remote_name)
+    print("\n{} IR: Sending IR command {} on {}").format(formatted_time(), ir_id, remote_name)
     error = subprocess.call(["irsend", "-#", str(num_times), "SEND_ONCE", remote_name, ir_id])
     if error:
-        print("IR: sending IR command {} {} times on {} failed").format(ir_id, num_times, remote_name)
+        print("{} IR: sending IR command {} {} times on {} failed").format(formatted_time(), ir_id, num_times, remote_name)
     else:
-        print("IR: sending IR command {} {} times on {} succeeded").format(ir_id, num_times, remote_name)
+        print("{} IR: sending IR command {} {} times on {} succeeded").format(ir_id, num_times, remote_name)
 
 def on_message(ws, message):
     message_json = json.loads(message)
     if message_json["type"] == "auth":
         if message_json["message"] == "success":
-            print("WS: auth success")
+            print("{} WS: auth success").format(formatted_time())
         else:
-            print("WS: auth failed")
+            print("{} WS: auth failed").format(formatted_time())
     elif message_json["type"] == "command":
-        print("\nIR: Received command:")
+        print("\n{} IR: Received command:").format(formatted_time())
         message = message_json["message"]
         name = message["name"]
         commands = message["commands"]
-        print("IR: command name: {}").format(name)
-        print("IR: commands: {}").format(commands)
+        print("{} IR: command name: {}").format(formatted_time(), name)
+        print("{} IR: commands: {}").format(formatted_time(), commands)
 
         for command in commands:
             ir_id = command["id"]
@@ -48,14 +51,14 @@ def on_message(ws, message):
             elif ir_id in samsung_discrete_ir_ids:
                 ir_send("SAMSUNG_DISCRETE", ir_id, delay, num_times)
             else:
-                print("Unrecognized IR id")
+                print("{} Unrecognized IR id").format(formatted_time())
     elif message_json["type"] == "pong":
-        print("WS: received pong")
+        print("{} WS: received pong").format(formatted_time())
 def on_error(ws, error):
     print(error)
 
 def on_close(ws):
-    print("### closed ###")
+    print("{} ### closed ###").format(formatted_time())
     time.sleep(reconnect_interval)
     connect_to_websocket_server()
 
@@ -63,15 +66,15 @@ def on_open(ws):
     def ping(*args):
         while True:
             time.sleep(ping_interval)
-            print("WS: sending ping")
+            print("{} WS: sending ping").format(formatted_time())
             ws.send(json.dumps({"token": token, "type": "ping"}))
     thread.start_new_thread(ping, ())
 
-    print("### websocket opened ###")
+    print("{} ### websocket opened ###").format(formatted_time())
     ws.send(json.dumps({"token": token, "type": "auth"}))
 
 def connect_to_websocket_server():
-    print("### connecting to websocket server ###")
+    print("{} ### connecting to websocket server ###").format(formatted_time())
     websocket.enableTrace(True)
     ws = websocket.WebSocketApp("wss://" + server_address,
                               on_message = on_message,
