@@ -60,6 +60,8 @@ def on_open(ws):
     def ping(*args):
         while True:
             time.sleep(pingInterval)
+            print("CURL: Sending request to keep server alive")
+            subprocess.call(["curl", "-X", "POST", "https://maker.ifttt.com/trigger/wake-up-websocket-server/with/key/drDYVkl-7t0Q-O0APGSeyw"])
             print("WS: sending ping")
             ws.send(json.dumps({"token": token, "type": "ping"}))
     thread.start_new_thread(ping, ())
