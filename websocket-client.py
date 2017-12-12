@@ -25,7 +25,7 @@ def ir_send(remote_name, ir_id, delay, num_times):
     if error:
         print("{} IR: sending IR command {} {} times on {} failed").format(formatted_time(), ir_id, num_times, remote_name)
     else:
-        print("{} IR: sending IR command {} {} times on {} succeeded").format(ir_id, num_times, remote_name)
+        print("{} IR: sending IR command {} {} times on {} succeeded").format(formatted_time(), ir_id, num_times, remote_name)
 
 def on_message(ws, message):
     message_json = json.loads(message)
