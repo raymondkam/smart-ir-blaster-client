@@ -10,7 +10,8 @@ with open('./config/websocket.json') as json_data:
     token = websocketJSON["token"]
     server_address = websocketJSON["server_address"]
 
-pingInterval = 30
+ping_interval = 30
+reconnect_interval = 10
 samsung_remote_ir_ids = ["KEY_MUTE", "KEY_VOLUMEUP", "KEY_VOLUMEDOWN"]
 samsung_discrete_ir_ids = ["POWER_ON", "POWER_OFF", "SOURCE_TV", "SOURCE_HDMI1","SOURCE_HDMI2"]
 
@@ -55,13 +56,13 @@ def on_error(ws, error):
 
 def on_close(ws):
     print("### closed ###")
+    time.sleep(reconnect_interval)
+    connect_to_websocket_server()
 
 def on_open(ws):
     def ping(*args):
         while True:
-            time.sleep(pingInterval)
-            print("CURL: Sending request to keep server alive")
-            subprocess.call(["curl", "-X", "POST", "https://maker.ifttt.com/trigger/wake-up-websocket-server/with/key/drDYVkl-7t0Q-O0APGSeyw"])
+            time.sleep(ping_interval)
             print("WS: sending ping")
             ws.send(json.dumps({"token": token, "type": "ping"}))
     thread.start_new_thread(ping, ())
@@ -69,7 +70,8 @@ def on_open(ws):
     print("### websocket opened ###")
     ws.send(json.dumps({"token": token, "type": "auth"}))
 
-if __name__ == "__main__":
+def connect_to_websocket_server():
+    print("### connecting to websocket server ###")
     websocket.enableTrace(True)
     ws = websocket.WebSocketApp("wss://" + server_address,
                               on_message = on_message,
@@ -77,3 +79,6 @@ if __name__ == "__main__":
                               on_close = on_close)
     ws.on_open = on_open
     ws.run_forever(sslopt={"cert_reqs": ssl.CERT_NONE})
+
+if __name__ == "__main__":
+    connect_to_websocket_server()
