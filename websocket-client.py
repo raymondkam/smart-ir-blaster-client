@@ -6,9 +6,15 @@ import json
 import ssl
 
 with open('./config/websocket.json') as json_data:
-    websocketJSON = json.load(json_data)
-    token = websocketJSON["token"]
-    server_address = websocketJSON["server_address"]
+    websocket_json = json.load(json_data)
+    token = websocket_json["token"]
+    server_address = websocket_json["server_address"]
+
+with open('./config/commands.json') as commands_data:
+    commands_json = json.load(commands_data)
+
+with open('./config/ps4_commands.json') as ps4_commands_data:
+    ps4_commands_json = json.load(ps4_commands_data)
 
 ping_interval = 30
 reconnect_interval = 10
@@ -27,6 +33,15 @@ def ir_send(remote_name, ir_id, delay, num_times):
     else:
         print("{} IR: sending IR command {} {} times on {} succeeded").format(formatted_time(), ir_id, num_times, remote_name)
 
+def ps4_waker_send(ps4_waker_subprocess_params):
+    print("\n{} PS4: Sending PS4 waker command with {}").format(formatted_time(), ps4_waker_subprocess_params)
+
+    error = subprocess.call(ps4_waker_subprocess_params)
+    if error:
+        print("{} PS4: sending PS4 command {} failed").format(formatted_time(), command)
+    else:
+        print("{} PS4: sending PS4 command {}  succeeded").format(formatted_time(), command)
+
 def on_message(ws, message):
     message_json = json.loads(message)
     if message_json["type"] == "auth":
@@ -36,12 +51,14 @@ def on_message(ws, message):
             print("{} WS: auth failed").format(formatted_time())
     elif message_json["type"] == "command":
         print("\n{} IR: Received command:").format(formatted_time())
-        message = message_json["message"]
-        name = message["name"]
-        commands = message["commands"]
+        command_id = message_json["message"]
+
+        # handle tv commands
+        command_json = commands_json[command_id]
+        name = command_json["name"]
+        commands = command_json["commands"]
         print("{} IR: command name: {}").format(formatted_time(), name)
         print("{} IR: commands: {}").format(formatted_time(), commands)
-
         for command in commands:
             ir_id = command["id"]
             delay = float(command["delay"])
@@ -52,6 +69,11 @@ def on_message(ws, message):
                 ir_send("SAMSUNG_DISCRETE", ir_id, delay, num_times)
             else:
                 print("{} Unrecognized IR id").format(formatted_time())
+
+        # handle ps4 commands
+        if command_id in ps4_commands_json:
+            ps4_waker_send(ps4_commands_json[command_id])
+
     elif message_json["type"] == "pong":
         print("{} WS: received pong").format(formatted_time())
 def on_error(ws, error):

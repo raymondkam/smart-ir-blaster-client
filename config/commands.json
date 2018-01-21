@@ -1,0 +1,18 @@
+{
+    "tv.on": { "name": "Turn on TV", "commands": [ { "id": "POWER_ON", "delay": 0, "numTimes": 2 }] },
+    "tv.off": { "name": "Turn off TV", "commands": [ { "id": "POWER_OFF", "delay": 0, "numTimes": 2 }] },
+    "tv.volumedown": { "name": "Turn TV volume down", "commands": [ { "id": "KEY_VOLUMEDOWN", "delay": 0.25, "numTimes": 2 }] },
+    "tv.volumedown5": { "name": "Turn TV volume down", "commands": [ { "id": "KEY_VOLUMEDOWN", "delay": 0.25, "numTimes": 2 }, { "id": "KEY_VOLUMEDOWN", "delay": 0.25, "numTimes": 2 }, { "id": "KEY_VOLUMEDOWN", "delay": 0.25, "numTimes": 2 }, { "id": "KEY_VOLUMEDOWN", "delay": 0.25, "numTimes": 2 }, { "id": "KEY_VOLUMEDOWN", "delay": 0.25, "numTimes": 2 }] },
+    "tv.volumeup": { "name": "Turn TV volume up", "commands": [ { "id": "KEY_VOLUMEUP", "delay": 0.25, "numTimes": 2 }] },
+    "tv.volumeup5": { "name": "Turn TV volume up", "commands": [ { "id": "KEY_VOLUMEUP", "delay": 0.25, "numTimes": 2 }, { "id": "KEY_VOLUMEUP", "delay": 0.25, "numTimes": 2 }, { "id": "KEY_VOLUMEUP", "delay": 0.25, "numTimes": 2 }, { "id": "KEY_VOLUMEUP", "delay": 0.25, "numTimes": 2 }, { "id": "KEY_VOLUMEUP", "delay": 0.25, "numTimes": 2 }] },
+    "tv.mute.unmute": { "name": "Mute/Un-mute the TV", "commands": [ { "id": "KEY_MUTE", "delay": 0, "numTimes": 2 }] },
+    "tv.input.tv": { "name": "Change the input to TV", "commands": [ { "id": "SOURCE_TV", "delay": 0, "numTimes": 2 }] },
+    "tv.input.hdmi1": { "name": "Change input to HDMI1", "commands": [ { "id": "SOURCE_HDMI1", "delay": 0, "numTimes": 2 }] },
+    "tv.input.hdmi2": { "name": "Change input to HDMI2", "commands": [ { "id": "SOURCE_HDMI2", "delay": 0, "numTimes": 2 }] },
+    "tv.ps4.on": { "name": "Turn on the PS4", "commands": [ { "id": "POWER_ON", "delay": 0, "numTimes": 2 }, { "id": "SOURCE_HDMI1", "delay": 8, "numTimes": 2 }] },
+    "tv.ps4.off": { "name": "Turn off the PS4", "commands": [ { "id": "POWER_OFF", "delay": 0, "numTimes": 2 }] },
+    "tv.ps4.netflix": { "name": "Turn on Netflix on PS4", "commands": [ { "id": "POWER_ON", "delay": 0, "numTimes": 2 }, { "id": "SOURCE_HDMI1", "delay": 8, "numTimes": 2 }] },
+    "tv.ps4.horizon.zero.dawn": { "name": "Let's play Horizon Zero Dawn on PS4", "commands": [ { "id": "POWER_ON", "delay": 0, "numTimes": 2 }, { "id": "SOURCE_HDMI1", "delay": 8, "numTimes": 2 }] },
+    "tv.ps4.overcooked": { "name": "Let's play Overcooked on PS4", "commands": [ { "id": "POWER_ON", "delay": 0, "numTimes": 2 }, { "id": "SOURCE_HDMI1", "delay": 8, "numTimes": 2 }] },
+    "tv.chromecast": { "name": "Turn on the Chromecast", "commands": [ { "id": "POWER_ON", "delay": 0, "numTimes": 2 }, { "id": "SOURCE_HDMI2", "delay": 8, "numTimes": 2 }] }
+}

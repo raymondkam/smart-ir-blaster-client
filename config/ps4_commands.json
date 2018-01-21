@@ -1,0 +1,7 @@
+{
+    "tv.ps4.on": ["ps4-waker"],
+    "tv.ps4.off": ["ps4-waker", "standby"],
+    "tv.ps4.netflix": ["ps4-waker", "start", "CUSA00129"],
+    "tv.ps4.horizon.zero.dawn": ["ps4-waker", "start", "CUSA01967"],
+    "tv.ps4.overcooked": ["ps4-waker", "start", "CUSA05724"]
+}
