@@ -1,6 +1,7 @@
 import subprocess
 import websocket
 import thread
+import threading
 import time
 import json
 import ssl
@@ -38,9 +39,14 @@ def ps4_waker_send(ps4_waker_subprocess_params):
 
     error = subprocess.call(ps4_waker_subprocess_params)
     if error:
-        print("{} PS4: sending PS4 command {} failed").format(formatted_time(), command)
+        print("{} PS4: sending PS4 command {} failed").format(formatted_time, ps4_waker_subprocess_params)
     else:
-        print("{} PS4: sending PS4 command {}  succeeded").format(formatted_time(), command)
+        print("{} PS4: sending PS4 command {}  succeeded").format(formatted_time(), ps4_waker_subprocess_params)
+
+def handle_command_ps4(ps4_commands_json, command_id):
+    subprocess_params = ps4_commands_json[command_id]
+    ps4_waker_send(subprocess_params)
+    return
 
 def on_message(ws, message):
     message_json = json.loads(message)
@@ -52,6 +58,11 @@ def on_message(ws, message):
     elif message_json["type"] == "command":
         print("\n{} IR: Received command:").format(formatted_time())
         command_id = message_json["message"]
+
+        # handle ps4 command in new thread
+        if command_id in ps4_commands_json: 
+            ps4_thread = threading.Thread(target=handle_command_ps4, args=(ps4_commands_json, command_id,))
+            ps4_thread.start()
 
         # handle tv commands
         command_json = commands_json[command_id]
@@ -69,10 +80,6 @@ def on_message(ws, message):
                 ir_send("SAMSUNG_DISCRETE", ir_id, delay, num_times)
             else:
                 print("{} Unrecognized IR id").format(formatted_time())
-
-        # handle ps4 commands
-        if command_id in ps4_commands_json:
-            ps4_waker_send(ps4_commands_json[command_id])
 
     elif message_json["type"] == "pong":
         print("{} WS: received pong").format(formatted_time())
